@@ -3,9 +3,8 @@ from .__init__ import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
     lastname = db.Column(db.String(80))
     firstname = db.Column(db.String(80))
     gender = db.Column(db.Enum('M', 'F'), default='M')

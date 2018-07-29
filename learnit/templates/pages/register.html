@@ -3,53 +3,50 @@
 {% block content %}
 
 <div class="container">
-    <h3>Registration form</h3>
-    <form>
+    <div class="card-panel">
+    <h3 class="center">Registration Form</h3>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == "register_success" %}
+                    <div>
+                        <div class="card-panel green lighten-2">{{ message }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/register">
+        {{ form.hidden_tag() }}
     <div class="row">
         <div class="input-field col s12 m6">
-            <input value="" id="firstname" type="text" class="validate">
-            <label class="active" for="firstname">First Name</label>
+            {{ form.firstname(class="validate") }}
+            {{ form.firstname.label(class="active") }}
         </div>
         <div class="input-field col s12 m6">
-            <input value="" id="lastname" type="text" class="validate">
-            <label class="active" for="lastname">Last Name</label>
+            {{ form.lastname(class="validate") }}
+            {{ form.lastname.label(class="active") }}
         </div>
         <div class="input-field col s12 m6">
-            <input value="" id="username" type="text" class="validate">
-            <label class="active" for="username">Username</label>
+            {{ form.email(class="validate") }}
+            {{ form.email.label(class="active") }}
         </div>
         <div class="input-field col s12 m6">
-            <input value="" id="password" type="password" class="validate">
-            <label class="active" for="password">Password</label>
-        </div>
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
+            {{ form.password(class="validate") }}
+            {{ form.password.label(class="active") }}
         </div>
         <div class="input-field col s4 m4">
-        <select>
-          <option value="" disabled selected>Month</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
-        <label>Birthday</label>
+            {{ form.bmonth() }}
+        <label>Month</label>
       </div>
       <div class="input-field col s4 m4">
-        <select>
-          <option value="" disabled selected>Day</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
+        {{ form.bday() }}
+        <label>Day</label>
       </div>
       <div class="input-field col s4 m4">
-        <select>
-          <option value="" disabled selected>Year</option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
+        {{ form.byear() }}
+        <label>Year</label>
       </div>
       <p>
         <label>
@@ -61,12 +58,20 @@
             <span>Female</span>
         </label>
       </p>
-      <button class="waves-effect waves-light btn-small right">Sign Up</button>
+      {{ form.submit(class="waves-effect waves-light btn-small right") }}
     </div>
     </form>
+</div>
 </div>
 
 {% endblock %}
 
 {% block script %}
+    <script>
+    {% for field in form.errors %}
+        {% for error in form.errors[field] %}
+            M.toast({html: '{{error}}', classes: 'red'})
+        {% endfor %}
+    {% endfor %}
+    </script>
 {% endblock %}

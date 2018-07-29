@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="card-panel">
+            <h3 class="center">Login</h3>
+            <form method="POST" action="/register">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="input-field col s12">
+                    {{ form.email(class="validate") }}
+                    {{ form.email.label(class="active") }}
+                    </div>
+                    <div class="input-field col s12">
+                    {{ form.password(class="validate") }}
+                    {{ form.password.label(class="active") }}
+                    </div>
+                    {{ form.submit(class="waves-effect waves-light btn-small right") }}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
