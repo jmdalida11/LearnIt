@@ -2,9 +2,20 @@
 
 {% block content %}
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == "log_failed" %}
+                        <div>
+                            <div class="card-panel red">{{ message }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div class="card-panel">
             <h3 class="center">Login</h3>
-            <form method="POST" action="/register">
+            <form method="POST" action="/login">
                 {{ form.hidden_tag() }}
                 <div class="row">
                     <div class="input-field col s12">
