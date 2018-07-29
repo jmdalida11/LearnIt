@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav>
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Learn It!</a>
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Learn It!</a>
         <ul id="slide-out" class="sidenav">
             <li>
                 <div class="user-view">
@@ -18,8 +18,8 @@
                 <a href="#user">
                     <img class="circle" src="https://image.freepik.com/free-vector/web-programmer_23-2147502079.jpg">
                 </a>
-                <a href="#name"><span class="white-text name">John Mark</span></a>
-                <a href="#email"><span class="white-text email">jmdalida11@gmail.com</span></a>
+                <a href="#name"><span class="white-text name">{{ session['name'] }}</span></a>
+                <a href="#email"><span class="white-text email">{{ session['email'] }}</span></a>
                 </div></li>
             <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
             <li><a href="#!">Second Link</a></li>
@@ -29,7 +29,7 @@
         </ul>
 
         <ul class="right hide-on-med-and-down">
-            <li><a href="#">Home</a></li>
+            <li><a href="/register">Register</a></li>
         </ul>
         <ul class="right hide-on-med-and-down">
             <li><a href="#">Profile</a></li>

@@ -1,7 +1,10 @@
 from flask import Flask
-from .views.pages import pages
+from .config import Config
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.register_blueprint(pages)
+app.config['SECRET_KEY'] = Config['SECRET_KEY']
+app.config['SQLALCHEMY_DATABASE_URI'] = Config['DATABASE_URI']
 
+db = SQLAlchemy(app)
