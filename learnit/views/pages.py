@@ -9,13 +9,14 @@ pages = Blueprint('pages', __name__)
 
 @pages.route('/')
 def home():
-    user = 'jm'
-    session['name'] = 'jm'
-    session['email'] = 'jm'
-    return render_template('pages/home.html', user=user)
+    return render_template('pages/home.html', user=current_user)
 
 @pages.route('/register', methods=['POST', 'GET'])
 def register():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('pages.activities'))
+
     form = RegistrationForm()
     if form.validate_on_submit():
 
@@ -62,6 +63,11 @@ def logout():
 @login_required
 def activities():
     return render_template('pages/activities.html')
+
+@pages.route('/profile')
+@login_required
+def profile():
+    return render_template('pages/profile.html') 
 
 
 
