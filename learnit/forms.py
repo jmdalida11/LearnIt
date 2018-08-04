@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Email, ValidationError
+from .models import User
 from datetime import datetime
 import calendar
 
@@ -17,6 +18,11 @@ class RegistrationForm(FlaskForm):
     bday = SelectField('Day', validators=[DataRequired()], choices=[(str(i+1),i+1) for i in range(31)])
     byear = SelectField('Year', validators=[DataRequired()], choices=[(str(i),i) for i in range(datetime.now().year, 1900, -1)])
     submit = SubmitField('Sign Up')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('Email is already taken.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email',

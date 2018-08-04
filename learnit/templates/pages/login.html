@@ -7,28 +7,31 @@
                 {% for category, message in messages %}
                     {% if category == "log_failed" %}
                         <div>
-                            <div class="card-panel red">{{ message }}</div>
+                            <div class="card-panel red white-text">{{ message }}</div>
                         </div>
                     {% endif %}
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        <div class="card-panel">
-            <h3 class="center">Login</h3>
-            <form method="POST" action="/login">
-                {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="input-field col s12">
-                    {{ form.email(class="validate") }}
-                    {{ form.email.label(class="active") }}
+        <br>
+        <div class="row">
+            <div class="col m6 offset-m3">
+                <h3 class="center">Login</h3>
+                <form method="POST" action="/login">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="input-field col s12">
+                        {{ form.email(class="validate") }}
+                        {{ form.email.label(class="active") }}
+                        </div>
+                        <div class="input-field col s12">
+                        {{ form.password(class="validate") }}
+                        {{ form.password.label(class="active") }}
+                        </div>
+                        {{ form.submit(class="waves-effect waves-light btn-large right col s12") }}
                     </div>
-                    <div class="input-field col s12">
-                    {{ form.password(class="validate") }}
-                    {{ form.password.label(class="active") }}
-                    </div>
-                    {{ form.submit(class="waves-effect waves-light btn-small right") }}
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}

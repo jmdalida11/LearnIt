@@ -3,6 +3,7 @@ from ..models import User, db
 from ..forms import RegistrationForm, LoginForm
 from datetime import date
 import hashlib
+from flask_login import login_user, logout_user, current_user, login_required 
 
 pages = Blueprint('pages', __name__)
 
@@ -34,21 +35,33 @@ def register():
 @pages.route('/login', methods=['POST', 'GET'])
 def login():
 
-    if request.method == 'POST':
+    if current_user.is_authenticated:
+        return redirect(url_for('pages.activities'))
 
+    if request.method == 'POST':
         hash_password = hashlib.sha1(request.form['password'].encode()).hexdigest()
-        registered_user = User.query.filter_by(email=request.form['email'],
+        user = User.query.filter_by(email=request.form['email'],
             password=hash_password).first()
 
-        if registered_user is None:
+        if user is None:
             flash('Email or Password is invalid' , 'log_failed')
             return redirect(url_for('pages.login'))
         else:
-            flash('successfully Login!' , 'log_failed')
-            return redirect(url_for('pages.login'))
+            login_user(user)
+            return redirect(url_for('pages.activities'))
 
     form = LoginForm()
     return render_template('pages/login.html', form=form)
+
+@pages.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('pages.login'))
+
+@pages.route('/activities')
+@login_required
+def activities():
+    return render_template('pages/activities.html')
 
 
 
