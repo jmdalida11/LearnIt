@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     activities = db.relationship('Activity', backref='user')
 
     def __repr__(self):
-        return f"User: {self.username}"
+        return f"User: {self.firstname} {self.lastname}"
 
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +30,10 @@ class Activity(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     last_update = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+class PostIt(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(60), nullable=False)
+    content = db.Column(db.String(60), nullable=False)
 
 login_manager = LoginManager()
 login_manager.login_view = 'pages.login'
