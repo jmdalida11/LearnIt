@@ -18,9 +18,17 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.String(120), nullable=False, default='default.png')
     created_by = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     activities = db.relationship('Activity', backref='user')
+    quizzes = db.relationship('Quiz', backref='user')
 
     def __repr__(self):
         return f"User: {self.firstname} {self.lastname}"
+
+login_manager = LoginManager()
+login_manager.login_view = 'pages.login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,10 +43,12 @@ class PostIt(db.Model):
     title = db.Column(db.String(60), nullable=False)
     content = db.Column(db.String(60), nullable=False)
 
-login_manager = LoginManager()
-login_manager.login_view = 'pages.login'
+class Quiz(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quiz_name = db.Column(db.String(60), nullable=False)
+    about = db.Column(db.Text)
+    quiz_type = db.Column(db.Enum('learn', 'choices', 'enumeration'), default='learn')
+    content = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
