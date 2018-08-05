@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, session, request, flash, redirect, url_for
+from flask import Blueprint, render_template, session, request, flash, redirect, url_for, jsonify
 from ..models import User, db
 from ..forms import RegistrationForm, LoginForm
 from datetime import date
 import hashlib
 from flask_login import login_user, logout_user, current_user, login_required 
+import secrets
+import os
+from ..__init__ import app
 
 pages = Blueprint('pages', __name__)
 
@@ -62,12 +65,34 @@ def logout():
 @pages.route('/activities')
 @login_required
 def activities():
-    return render_template('pages/activities.html')
+
+    custom_activities = current_user.activities
+    print(custom_activities)
+    return render_template('pages/activities.html', custom_activities=custom_activities)
 
 @pages.route('/profile')
 @login_required
 def profile():
     return render_template('pages/profile.html') 
 
+@pages.route('/updateAvatarBio', methods=['POST'])
+@login_required
+def updateAvatarBio():
+    data = {}
+    current_user.bio = request.form['bio']
+    if request.form['toUploadAvatar'] == 'True':
+        image_file = save_image(request.files['avatar'])
+        current_user.image_profile = image_file
+        data['status'] = 'success_avatar'
+        data['avatar'] = 'static/avatar/' + image_file
+    else:
+        data['status'] = 'success'
+    db.session.commit()
+    return jsonify(data)
 
-
+def save_image(img):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(img.filename)
+    image_name = random_hex + f_ext
+    img.save(os.path.join(app.root_path, 'static/avatar', image_name))
+    return image_name

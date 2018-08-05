@@ -2,3 +2,5 @@ env/
 __pycache__/
 *.pyc
 *.db
+learnit/static/avatar/*
+!learnit/static/avatar/default.png

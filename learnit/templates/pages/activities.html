@@ -3,43 +3,51 @@
 {% block content %}
 
 <div class="container">
-    <h4>Activities </h4>
+    <h5>Default Activities</h5>
 
     <ul class="collection">
         <li class="collection-item avatar">
-          <img src="https://vignette.wikia.nocookie.net/defenseoftheancients/images/6/64/Dota_2_Logo_only.png/revision/latest?cb=20110914005751" alt="" class="circle">
-          <span class="title">Title</span>
-          <p>First Line <br>
-             Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+            <i class="material-icons circle blue">insert_chart</i>
+          <span class="title"><b>Quiz</b></span>
+          <p>Learn it from Quizzes</p>
+          <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
         </li>
         <li class="collection-item avatar">
-          <i class="material-icons circle">folder</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-             Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+          <i class="material-icons circle green">games</i>
+          <span class="title"><b>Games</b></span>
+          <p>Learn it while having fun</p>
+          <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
         </li>
         <li class="collection-item avatar">
-          <i class="material-icons circle green">insert_chart</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-             Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+          <i class="material-icons circle orange">library_books</i>
+          <span class="title"><b>Reviewer</b></span>
+          <p>Review what you have learnt</p>
+          <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
         </li>
         <li class="collection-item avatar">
           <i class="material-icons circle red">play_arrow</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-             Second Line
-          </p>
+          <span class="title"><b>Watch Tutorials</b></span>
+          <p>Learn by watching video</p>
           <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
         </li>
       </ul>
+      <h5>Custom Activities</h5>
+      {% if custom_activities %}
+        {% for activity in custom_activities %}
+        <ul class="collection">
+                <li class="collection-item avatar">
+                        <i class="material-icons circle red">archive</i>
+                        <span class="title"><b>{{activity.title}}</b></span>
+                        <p>{{activity.about}}</p>
+                        <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
+                    </li>
+        </ul>
+        {% endfor %}
+      {% else %}
+        <p>You have no custom activities yet!</p>
+      {% endif %}
       <a class="btn-floating btn-large waves-effect waves-light red right"><i class="material-icons">add</i></a>
+
 </div>
 
 {% endblock %}

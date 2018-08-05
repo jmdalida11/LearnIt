@@ -8,17 +8,18 @@
         <div class="col s12 m4 center-align">
             <div class="card">
                 <div class="card-image">
-                    <img class="materialboxed" src="https://image.freepik.com/free-vector/web-programmer_23-2147502079.jpg">
-                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">edit</i></a>
+                    <img class="materialboxed" id="myavatar" src="static/avatar/{{current_user.image_profile}}">
+                    <a class="btn-floating halfway-fab waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">edit</i></a>
                 </div>
                 <div class="card-content">
-                    <p>{{current_user.bio}}</p>
+                    <p id="bio">{{current_user.bio}}</p>
                 </div>
             </div>
             <ul class="collection">
-                <li class="collection-item">John Mark Dalida</li>
-                <li class="collection-item">jmdalida11@gmail.com</li>
+                <li class="collection-item">{{current_user.firstname}} {{current_user.lastname}}</li>
+                <li class="collection-item">{{current_user.email}}</li>
             </ul>
+            <a class="waves-effect waves-light btn modal-trigger col s12 m12" href="#settings">Settings</a>
         </div>
         <div class="col s12 m7 offset-m1">
             <div class="card">
@@ -81,7 +82,98 @@
         </div>
     </div>
 
+    <!-- Modal Structure -->
+    <div id="settings" class="modal bottom-sheet">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Update Avatar and Bio</h4>
+            <div class="row">
+                <form class="col s12" method="POST" action="{{url_for('pages.updateAvatarBio')}}" enctype="multipart/form-data">
+                    <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea id="edit_bio" name="bio" class="materialize-textarea">{{current_user.bio}}</textarea>
+                        <label for="edit_bio">Bio</label>
+                    </div>
+                    </div>
+                    <div class="file-field input-field">
+                        <div class="file-path-wrapper">
+                            <i class="material-icons prefix">image</i>
+                            <input type="file" id="avatar" accept="image/*" name="avatar">
+                            <input class="file-path validate" type="text" placeholder="Upload Avatar">
+                        </div>
+                    </div>
+                    <input type="hidden" name="toUploadAvatar">
+                    <span id="bio_loading"></span>
+                    
+                    <button class="waves-effect waves-green btn right" id="saveAvatarBio">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+        
 
 </div>
 
+{% endblock %}
+
+{% block script %}
+<script>
+
+    const bt = document.getElementById('saveAvatarBio');
+
+    bt.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const url = "{{url_for('pages.updateAvatarBio')}}";
+        const bio = document.getElementById('bio');
+        const bio_data = document.getElementById('edit_bio');
+        const avatar = document.getElementById('avatar');
+        
+        let formData = new FormData();
+        formData.append('bio', bio_data.value);
+        formData.append('avatar', avatar.files[0]);
+
+        if(avatar.files[0]){
+            formData.append('toUploadAvatar', 'True');
+        }else{
+            formData.append('toUploadAvatar', 'False');
+        }
+
+        const bio_loading = document.getElementById('bio_loading');
+        bio_loading.innerHTML = "Please wait, Loading...";
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+           credentials: 'include'
+        }).then(response => {
+            console.log(response)
+            return response.json()
+        }).then(data => {
+            if(data.status == "success"){
+                bio.innerHTML = bio_data.value;
+                bio_loading.innerHTML = "";
+            }else if(data.status == "success_avatar"){
+                bio.innerHTML = bio_data.value;
+                bio_loading.innerHTML = "";
+                const profile_image = document.getElementById('myavatar');
+                profile_image.src = data.avatar;
+            }
+        }).catch(err => console.log(err));
+    }
+
+    
+
+</script>
 {% endblock %}

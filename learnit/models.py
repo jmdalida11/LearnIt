@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
     bday = db.Column(db.DateTime)
     bio = db.Column(db.Text)
     premium = db.Column(db.Boolean, default=False)
-    image_profile = db.Column(db.String(120), nullable=False, default='default.jpg')
+    image_profile = db.Column(db.String(120), nullable=False, default='default.png')
     created_by = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     activities = db.relationship('Activity', backref='user')
 
