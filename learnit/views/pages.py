@@ -12,7 +12,7 @@ pages = Blueprint('pages', __name__)
 
 @pages.route('/')
 def home():
-    return render_template('pages/home.html', user=current_user)
+    return render_template('pages/home.html')
 
 @pages.route('/register', methods=['POST', 'GET'])
 def register():
@@ -81,7 +81,11 @@ def updateAvatarBio():
     data = {}
     current_user.bio = request.form['bio']
     if request.form['toUploadAvatar'] == 'True':
-        image_file = save_image(request.files['avatar'])
+        image_file = save_avatar(request.files['avatar'])
+        try:
+            os.remove(os.path.join(app.root_path, 'static/avatar', current_user.image_profile))
+        except:
+            print("Image not found")
         current_user.image_profile = image_file
         data['status'] = 'success_avatar'
         data['avatar'] = 'static/avatar/' + image_file
@@ -90,7 +94,7 @@ def updateAvatarBio():
     db.session.commit()
     return jsonify(data)
 
-def save_image(img):
+def save_avatar(img):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(img.filename)
     image_name = random_hex + f_ext
