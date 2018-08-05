@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from ..models import User, db
 from ..forms import RegistrationForm, LoginForm
 from datetime import date
@@ -83,10 +83,11 @@ def updateAvatarBio():
     if request.form['toUploadAvatar'] == 'True':
         image_file = save_avatar(request.files['avatar'])
         try:
-            os.remove(os.path.join(app.root_path, 'static/avatar', current_user.image_profile))
+            if current_user.avatar != "default.png":
+                os.remove(os.path.join(app.root_path, 'static/avatar', current_user.avatar))
         except:
             print("Image not found")
-        current_user.image_profile = image_file
+        current_user.avatar = image_file
         data['status'] = 'success_avatar'
         data['avatar'] = 'static/avatar/' + image_file
     else:
